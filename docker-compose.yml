@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/config/:/etc/nginx/conf.d
+      - ./docker/nginx/log/:/var/log/nginx
+      - ./:/var/www
+    depends_on:
+      - php
+  php:
+    build: 
+      context: ./
+      dockerfile: ./docker/php/php-fpm.dockerfile
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql
+    ports:
+      - "33061:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=secret"
+      - "MYSQL_USER=app"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_DATABASE=feedback"
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+      - "PMA_HOST=mysql"
+      - "PMA_PORT=3306"
+    depends_on:
+      - mysql
+    ports:
+      - "8888:80"
+
+volumes:
+  mysql_data:
+
