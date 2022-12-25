@@ -48,8 +48,8 @@ class User extends Authenticatable
         return $this->hasOne(Role::class);
     }
 
-    public function setUserRole()
+    public function setUserRole($role)
     {
-       Role::create(['title' => 'User', 'user_id' => $this->id]);
+       Role::create(['title' => $role, 'user_id' => $this->id]);
     }
 }
