@@ -19,14 +19,20 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
+        
         $guards = empty($guards) ? [null] : $guards;
-
+        
         foreach ($guards as $guard) {
+           
             if (Auth::guard($guard)->check()) {
-                return (Auth::user()->role == 'Manager') ? '/dashboard' : '/feedback';
+                
+                if (Auth::user()->role->title == 'Manager') {
+                    return redirect('/dashboard');
+                } else {
+                    return redirect('/feedback');
+                }
             }
         }
-
         return $next($request);
     }
 }
