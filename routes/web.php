@@ -21,7 +21,16 @@ Auth::routes();
 
 
 Route::group(['middleware' => 'auth'], function(){
-    Route::get('/feedback', [App\Http\Controllers\UserController::class, 'index'])->name('user')->middleware('role:User');
-    Route::get('/dashboard', [App\Http\Controllers\ManagerController::class, 'index'])->name('manager')->middleware('role:Manager');
+    Route::group(['middleware' => 'role:User'], function(){
+        Route::get('/feedback', [App\Http\Controllers\UserController::class, 'index'])->name('user');
+        Route::post('/feedback', [App\Http\Controllers\UserController::class, 'store'])->name('application.store');
+    });
+
+    Route::group(['middleware' => 'role:Manager'], function(){
+        Route::get('/dashboard', [App\Http\Controllers\ManagerController::class, 'index'])->name('manager');
+    });
+
+
+    
 });
 

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Role;
+use App\Models\Application;
 
 class User extends Authenticatable
 {
@@ -47,7 +48,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Role::class);
     }
-
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
     public function setUserRole($role)
     {
        Role::create(['title' => $role, 'user_id' => $this->id]);
