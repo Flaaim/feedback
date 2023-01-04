@@ -23,7 +23,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function(){
     Route::group(['middleware' => 'role:User'], function(){
         Route::get('/feedback', [App\Http\Controllers\UserController::class, 'index'])->name('user');
-        Route::post('/feedback', [App\Http\Controllers\UserController::class, 'store'])->name('application.store');
+        Route::post('/feedback', [App\Http\Controllers\UserController::class, 'store'])->name('application.store')->middleware('throttle:create_application');
     });
 
     Route::group(['middleware' => 'role:Manager'], function(){

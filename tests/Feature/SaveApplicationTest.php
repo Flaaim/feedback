@@ -22,4 +22,12 @@ class SaveApplicationTest extends TestCase
         $this->assertDatabaseHas('applications', ['theme' => 'One', 'message' => 'Hello', 'file' => 'file.xml']);
     }
 
+    public function test_what_user_can_create_application_once_a_day()
+    {
+        $user = User::factory()->hasRole(['title'=>'User', 'user_id'=>User::factory()])->create();
+        $response = $this->actingAs($user)->post('/feedback', ['theme' => 'One', 'message' => 'Hello', 'file' => 'file.xml']);
+        $response = $this->actingAs($user)->post('/feedback', ['theme' => 'One', 'message' => 'Hello', 'file' => 'file.xml']);
+        $response->assertStatus(302);
+    }
+
 }
