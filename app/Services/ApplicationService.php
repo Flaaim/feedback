@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Application;
+use App\Events\ApplicationCreate;
 
 class ApplicationService 
 {
@@ -12,6 +13,7 @@ class ApplicationService
         $request->merge(['user_id' => $user->id]);
         $model->fill($request->only($model->getFillable()));
         $model->save();
+        event(new ApplicationCreate($model));
     }
 }
 
